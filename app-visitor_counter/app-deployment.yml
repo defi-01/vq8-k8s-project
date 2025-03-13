@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: visit-counter
+  namespace: vq8
+  labels:
+    app: visit-counter
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: visit-counter
+  template:
+    metadata:
+      labels:
+        app: visit-counter
+    spec:
+      initContainers:
+      - name: init-redis-check
+        image: busybox:1.28
+        command: ['sh', '-c', "until nc -z $(REDIS_HOST) $(REDIS_PORT); do echo waiting for redis; sleep 2; done"]
+        envFrom:
+        - configMapRef:
+            name: app-config
+      containers:
+      - name: visit-counter
+        image: henrywaldos/visit-counter:latest
+        ports:
+        - containerPort: 5000
+        envFrom:
+        - configMapRef:
+            name: app-config
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: "256Mi"
+          requests:
+            cpu: "0.1"
+            memory: "128Mi"
+      imagePullSecrets:
+      - name: regcred
