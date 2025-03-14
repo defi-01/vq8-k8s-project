@@ -1,14 +1,14 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: visit-counter-ingress
+  name: visit-counter-jenkins-ingress
   namespace: vq8-jenkins
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:
-  - host: visit-counter
+  - host: visit-counter-jenkins
     http:
       paths:
       - path: /
