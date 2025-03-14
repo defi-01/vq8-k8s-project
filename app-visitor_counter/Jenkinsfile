@@ -47,7 +47,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'kube-config', variable: 'KUBE_CONFIG')]) {
-                        sh "sed -i 's|image: .*|image: henrywaldos/visit-counter:latest|' k8s/app-visitor_counter/app-deployment.yml"
+                        sh "sed -i 's|image: .*|image: henrywaldos/visit-counter:latest|' app-visitor_counter/app-deployment.yml"
                         sh "kubectl --kubeconfig=${KUBE_CONFIG} --insecure-skip-tls-verify apply -n vq8-jenkins -f k8s/app-visitor_counter/app-configmap.yml"
                         sh "kubectl --kubeconfig=${KUBE_CONFIG} --insecure-skip-tls-verify apply -n vq8-jenkins -f k8s/app-visitor_counter/redis-service.yml"
                         sh "kubectl --kubeconfig=${KUBE_CONFIG} --insecure-skip-tls-verify apply -n vq8-jenkins -f k8s/app-visitor_counter/redis-statefulset.yml"
