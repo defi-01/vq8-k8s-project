@@ -1,0 +1,78 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_HUB_CREDS = credentials('docker-hub-credentials')
+        DOCKER_IMAGE = "henrywaldos/visit-counter"
+        KUBE_CONFIG = credentials('kube-config')
+        DOCKER_HUB_USER = "henrywaldos"
+    }
+
+    stages {
+        
+        stage('Clone Repository') {
+            steps {
+                dir('k8s') {
+                    script {
+                        def repoExists = fileExists('.git')
+                        if (repoExists) {
+                            sh 'git pull'
+                        } else {
+                            withCredentials([string(credentialsId: 'github-credentials', variable: 'GIT_TOKEN')]) {
+                                sh 'git clone https://x-access-token:$GIT_TOKEN@github.com/defi-01/k8s .'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Login to Docker Hub') {
+            steps {
+                withCredentials([string(credentialsId: 'docker-hub-credentials', variable: 'DOCKER_HUB_TOKEN')]) {
+                    sh "docker login -u ${env.DOCKER_HUB_USER} -p ${DOCKER_HUB_TOKEN}"
+                }
+            }
+        }
+
+        stage('Pull Docker Image') {
+            steps {
+                script {
+                    sh "docker pull ${DOCKER_IMAGE}:latest"
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    withCredentials([file(credentialsId: 'kube-config', variable: 'KUBE_CONFIG')]) {
+                        sh "sed -i 's|image: .*|image: henrywaldos/visit-counter:latest|' k8s/app-visitor_counter/app-deployment.yml"
+                        sh "kubectl --kubeconfig=${KUBE_CONFIG} --insecure-skip-tls-verify apply -n vq8-jenkins -f k8s/app-visitor_counter/app-configmap.yml"
+                        sh "kubectl --kubeconfig=${KUBE_CONFIG} --insecure-skip-tls-verify apply -n vq8-jenkins -f k8s/app-visitor_counter/redis-service.yml"
+                        sh "kubectl --kubeconfig=${KUBE_CONFIG} --insecure-skip-tls-verify apply -n vq8-jenkins -f k8s/app-visitor_counter/redis-statefulset.yml"
+                        sh "kubectl --kubeconfig=${KUBE_CONFIG} --insecure-skip-tls-verify apply -n vq8-jenkins -f k8s/app-visitor_counter/app-service.yml"
+                        sh "kubectl --kubeconfig=${KUBE_CONFIG} --insecure-skip-tls-verify apply -n vq8-jenkins -f k8s/app-visitor_counter/app-deployment.yml"
+                        sh "kubectl --kubeconfig=${KUBE_CONFIG} --insecure-skip-tls-verify apply -n vq8-jenkins -f k8s/app-visitor_counter/ingress.yml"
+                    }
+                }
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                script {
+                    withCredentials([file(credentialsId: 'kube-config', variable: 'KUBE_CONFIG')]) {
+                        sh "kubectl --kubeconfig=${KUBE_CONFIG} --insecure-skip-tls-verify get pods -n vq8-jenkins"
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            sh "docker logout || true"
+        }
+    }
+}
