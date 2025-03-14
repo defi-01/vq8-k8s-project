@@ -16,7 +16,6 @@ pipeline {
                     script {
                         def repoExists = fileExists('.git')
                         if (repoExists) {
-                            sh 'git reset --hard origin/main'
                             sh 'git pull'
                         } else {
                             withCredentials([string(credentialsId: 'github-credentials', variable: 'GIT_TOKEN')]) {
