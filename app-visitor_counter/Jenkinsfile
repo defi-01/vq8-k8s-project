@@ -3,9 +3,9 @@ pipeline {
 
     environment {
         DOCKER_HUB_CREDS = credentials('docker-hub-credentials')
-        DOCKER_IMAGE = "henrywaldos/visit-counter"
+        DOCKER_IMAGE = "..."
         KUBE_CONFIG = credentials('kube-config')
-        DOCKER_HUB_USER = "henrywaldos"
+        DOCKER_HUB_USER = "..."
     }
 
     stages {
@@ -54,7 +54,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'kube-config', variable: 'KUBE_CONFIG')]) {
-                        sh "kubectl --kubeconfig=${KUBE_CONFIG} --insecure-skip-tls-verify get pods -n vq8-jenkins"
+                        sh "kubectl --kubeconfig=${KUBE_CONFIG} get pods -n vq8-jenkins"
                     }
                 }
             }
