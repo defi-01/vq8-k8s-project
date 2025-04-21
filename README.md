@@ -16,4 +16,4 @@
 
 - 🔄 Automate the process using Jenkins
 
-![Building a Web Application with Visit Count Using Redis and Kubernetes - visual selection](https://github.com/user-attachments/assets/57ab7005-aed8-4364-9080-24a325a198f5)
+![Building and Deploying a Web Application with Kubernetes and Jenkins - visual selection](https://github.com/user-attachments/assets/ad5e6b3d-e5e2-44b9-9eb5-a4c03788cd6b)
