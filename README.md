@@ -1,4 +1,4 @@
-# 🚀 [Web Application with Kubernetes and Jenkins] 🚀
+# [Web Application with Kubernetes and Jenkins]
 ## ☁️ • vq8-k8s-project • ☁️
 #### This project focuses on building and deploying a web application with Kubernetes and Jenkins. The workflow is fully automated using Jenkins for CI/CD, and Kubernetes for container orchestration. The main tasks include:
 
