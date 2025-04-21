@@ -19,7 +19,7 @@ pipeline {
                             sh 'git pull'
                         } else {
                             withCredentials([string(credentialsId: 'github-credentials', variable: 'GIT_TOKEN')]) {
-                                sh 'git clone https://x-access-token:$GIT_TOKEN@github.com/defi-01/k8s .'
+                                sh 'git clone https://x-access-token:$GIT_TOKEN@github.com/defi-01/vq8-k8s-project .'
                             }
                         }
                     }
