@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: app-config
-  namespace: vq8-jenkins
+  namespace: vq8-k8s
 data:
   REDIS_HOST: "redis"
   REDIS_PORT: "6379"
