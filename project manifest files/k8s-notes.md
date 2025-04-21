@@ -14,12 +14,12 @@ kubectl create secret docker-registry regcred \
 ## Kubernetes Manifest Application
 
 ```bash
-kubectl apply -n vq8-jenkins -f configmap.yml
-kubectl apply -n vq8-jenkins -f redis-service.yml
-kubectl apply -n vq8-jenkins -f redis-statefulset.yml
-kubectl apply -n vq8-jenkins -f app-service.yml
-kubectl apply -n vq8-jenkins -f app-deployment.yml
-kubectl apply -n vq8-jenkins -f ingress.yml
+kubectl apply -n vq8-k8s -f configmap.yml
+kubectl apply -n vq8-k8s -f redis-service.yml
+kubectl apply -n vq8-k8s -f redis-statefulset.yml
+kubectl apply -n vq8-k8s -f app-service.yml
+kubectl apply -n vq8-k8s -f app-deployment.yml
+kubectl apply -n vq8-k8s -f ingress.yml
 ```
 
 ## Dockerfile for Jenkins with Docker and kubectl
