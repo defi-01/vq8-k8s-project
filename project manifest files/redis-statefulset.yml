@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: redis
-  namespace: vq8-jenkins
+  namespace: vq8-k8s
   labels:
     app: redis
 spec:
@@ -35,7 +35,7 @@ spec:
   volumeClaimTemplates:
   - metadata:
       name: redis-data
-      namespace: vq8-jenkins
+      namespace: vq8-k8s
     spec:
       accessModes: ["ReadWriteOnce"]
       resources:
