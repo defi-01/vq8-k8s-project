@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: visit-counter
-  namespace: vq8-jenkins
+  namespace: vq8-k8s
   labels:
     app: visit-counter
 spec:
